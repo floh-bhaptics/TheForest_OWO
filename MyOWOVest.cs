@@ -60,6 +60,7 @@ namespace MyOwoVest
             LOG("Initializing suit");
             OWO.OnConnected.AddListener(InitializeOWO);
             OWO.AutoConnect();
+            //OWO.Connect("192.168.1.212");
             LOG("Starting rain thread.");
             Thread RainThread = new Thread(RainFunc);
             RainThread.Start();
@@ -122,6 +123,7 @@ namespace MyOwoVest
             }
 
             systemInitialized = true;
+            PlayBackFeedback("Startup");
         }
 
         public string DetachFromMuscles(string pattern)
@@ -189,8 +191,8 @@ namespace MyOwoVest
 
         public void Recoil(bool isRightHand)
         {
-            if (isRightHand) PlayBackFeedback("Recoil_R");
-            else PlayBackFeedback("Recoil_L");
+            if (isRightHand) PlayBackFeedback("RecoilBlade_R");
+            else PlayBackFeedback("RecoilBlade_L");
         }
 
         public void PlayBackFeedback(string feedback, float intensity = 1.0f)
