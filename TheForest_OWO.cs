@@ -171,6 +171,7 @@ namespace TheForest_bhaptics
             public static void Postfix(WaterViz __instance)
             {
                 if (__instance.InWater) { tactsuitVr.PlayBackFeedback("Diving"); }
+                else { tactsuitVr.StopThreads(); }
             }
         }
 
