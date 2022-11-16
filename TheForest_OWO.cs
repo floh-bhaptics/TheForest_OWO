@@ -275,7 +275,7 @@ namespace TheForest_bhaptics
             public static void Postfix(float getDist)
             {
                 float intensity = Math.Max((50f - getDist) / 50f, 0.0f);
-                tactsuitVr.PlayBackFeedback("ExplosionBelly", intensity);
+                tactsuitVr.PlayBackFeedback("Explosion", intensity);
             }
         }
 
@@ -286,7 +286,7 @@ namespace TheForest_bhaptics
             public static void Postfix(float dist, bool fromPlayer)
             {
                 float intensity = Math.Max((50f - dist) / 50f, 0.0f);
-                tactsuitVr.PlayBackFeedback("ExplosionBelly", intensity);
+                tactsuitVr.PlayBackFeedback("Explosion", intensity);
             }
         }
 
@@ -297,7 +297,7 @@ namespace TheForest_bhaptics
             public static void Postfix(float hitDist)
             {
                 float intensity = Math.Max((50f - hitDist) / 50f, 0.0f);
-                tactsuitVr.PlayBackFeedback("ExplosionBelly", intensity);
+                tactsuitVr.PlayBackFeedback("Explosion", intensity);
             }
         }
 
@@ -307,7 +307,7 @@ namespace TheForest_bhaptics
             [HarmonyPostfix]
             public static void Postfix()
             {
-                tactsuitVr.LOG("Fell");
+                //tactsuitVr.LOG("Fell");
                 tactsuitVr.PlayBackFeedback("FallDamage");
             }
         }
@@ -334,7 +334,7 @@ namespace TheForest_bhaptics
                         tactsuitVr.PlayBackFeedback("Poison");
                         break;
                     case PlayerStats.DamageType.Physical:
-                        tactsuitVr.PlayBackFeedback("Impact");
+                        tactsuitVr.PlayBackFeedback("HitFront");
                         break;
                     default:
                         break;
@@ -420,7 +420,7 @@ namespace TheForest_bhaptics
             public static void Postfix()
             {
                 tactsuitVr.StopThreads();
-                tactsuitVr.PlayBackFeedback("HeartBeat");
+                tactsuitVr.PlayBackFeedback("ThreeHeartBeats");
             }
         }
         
@@ -465,7 +465,7 @@ namespace TheForest_bhaptics
             [HarmonyPostfix]
             public static void Postfix()
             {
-                tactsuitVr.PlayBackFeedback("HeartBeat");
+                tactsuitVr.PlayBackFeedback("ThreeHeartBeats");
             }
         }
         #endregion

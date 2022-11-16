@@ -19,16 +19,50 @@ namespace MyOwoVest
          * */
         public bool suitDisabled = true;
         public bool systemInitialized = false;
-        // Event to start and stop the heartbeat thread
+        // Event to start and stop the rain thread
+        private static ManualResetEvent Rain_mrse = new ManualResetEvent(false);
+        private static Random rainRandom = new Random();
+        private readonly int rainDropPause = 800;
+        private readonly int rainDropIntensity = 100;
+        private int randomMuscleNumber = 0;
+
         public Dictionary<String, ISensation> FeedbackMap = new Dictionary<String, ISensation>();
         public Dictionary<String, ISensation> FeedbackMapWithoutMuscles = new Dictionary<String, ISensation>();
+
+        public Muscle getRandomMuscleRain()
+        {
+            randomMuscleNumber = rainRandom.Next(20);
+            if (randomMuscleNumber >= 16) return Muscle.Arm_L;
+            if (randomMuscleNumber >= 12) return Muscle.Arm_R;
+            if (randomMuscleNumber >= 10) return Muscle.Pectoral_L;
+            if (randomMuscleNumber >= 8) return Muscle.Pectoral_R;
+            if (randomMuscleNumber >= 6) return Muscle.Dorsal_L;
+            if (randomMuscleNumber >= 4) return Muscle.Dorsal_R;
+            if (randomMuscleNumber >= 3) return Muscle.Lumbar_L;
+            if (randomMuscleNumber >= 2) return Muscle.Lumbar_R;
+            if (randomMuscleNumber >= 1) return Muscle.Abdominal_L;
+            return Muscle.Abdominal_R;
+        }
+
+        public void RainFunc()
+        {
+            while (true)
+            {
+                Rain_mrse.WaitOne();
+                OWO.Send(FeedbackMapWithoutMuscles["Raindrop"], getRandomMuscleRain().WithIntensity(rainRandom.Next(rainDropIntensity)));
+                Thread.Sleep(rainRandom.Next(rainDropPause) + 200);
+            }
+        }
+
 
         public TactsuitVR()
         {
             LOG("Initializing suit");
             OWO.OnConnected.AddListener(InitializeOWO);
             OWO.AutoConnect();
-            //InitializeOWO();
+            LOG("Starting rain thread.");
+            Thread RainThread = new Thread(RainFunc);
+            RainThread.Start();
         }
 
         private void InitializeOWO()
@@ -97,17 +131,18 @@ namespace MyOwoVest
 
         public void StartRain()
         {
-
+            Rain_mrse.Set();
         }
 
         public void StopRain()
         {
-
+            Rain_mrse.Reset();
         }
 
         public void StopThreads()
         {
-            StopRain();
+            Rain_mrse.Reset();
+            OWO.StopSensation();
         }
 
         public void PlayBackHit(string pattern, float xzAngle, float yShift, float intensity = 1.0f)
