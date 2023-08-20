@@ -59,7 +59,16 @@ namespace MyOwoVest
         {
             LOG("Initializing suit");
             OWO.OnConnected.AddListener(InitializeOWO);
-            OWO.AutoConnect();
+            string IPFile = Directory.GetCurrentDirectory() + "\\Mods\\OWO\\IP.txt";
+            if(File.Exists(IPFile))
+            {
+                string IP=File.ReadAllText(IPFile);
+                OWO.Connect(IP);
+            }
+            else
+            {
+                OWO.AutoConnect();
+            }
             //OWO.Connect("192.168.1.212");
             LOG("Starting rain thread.");
             Thread RainThread = new Thread(RainFunc);
