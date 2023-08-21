@@ -64,6 +64,7 @@ namespace MyOwoVest
             {
                 string IP=File.ReadAllText(IPFile);
                 OWO.Connect(IP);
+                Thread.Sleep(100);
             }
             else
             {
