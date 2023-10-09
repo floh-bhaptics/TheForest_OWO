@@ -17,7 +17,7 @@ namespace TheForest_bhaptics
         public static bool isRightHanded = true;
         public static bool planeFallen = false;
 
-        public override void OnLoaderInitialized()
+        public override void OnInitializeMelon()
         {
             //base.OnApplicationStart();
             tactsuitVr = new TactsuitVR();

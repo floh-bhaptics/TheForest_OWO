@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>D:\Games\Steam\steamapps\common\The Forest\MelonLoader\0Harmony.dll</HintPath>
+      <HintPath>D:\Games\Steam\steamapps\common\The Forest\MelonLoader\net35\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
@@ -40,7 +40,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="MelonLoader">
-      <HintPath>D:\Games\Steam\steamapps\common\The Forest\MelonLoader\MelonLoader.dll</HintPath>
+      <HintPath>D:\Games\Steam\steamapps\common\The Forest\MelonLoader\net35\MelonLoader.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="OWO_Net35.dev">
