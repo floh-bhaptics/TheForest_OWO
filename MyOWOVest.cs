@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Text;
 using System.Threading;
 using MelonLoader;
-using OWOHaptic;
+using OWOGame;
 //using MyOWOSensations;
 
 namespace MyOwoVest
@@ -17,7 +18,7 @@ namespace MyOwoVest
          * - A logging hook to output to the Melonloader log
          * - 
          * */
-        public bool suitDisabled = true;
+        public bool suitDisabled = false;
         public bool systemInitialized = false;
         // Event to start and stop the rain thread
         private static ManualResetEvent Rain_mrse = new ManualResetEvent(false);
@@ -26,8 +27,7 @@ namespace MyOwoVest
         private readonly int rainDropIntensity = 100;
         private int randomMuscleNumber = 0;
 
-        public Dictionary<String, ISensation> FeedbackMap = new Dictionary<String, ISensation>();
-        public Dictionary<String, ISensation> FeedbackMapWithoutMuscles = new Dictionary<String, ISensation>();
+        public Dictionary<String, Sensation> FeedbackMap = new Dictionary<String, Sensation>();
 
         public Muscle getRandomMuscleRain()
         {
@@ -49,7 +49,7 @@ namespace MyOwoVest
             while (true)
             {
                 Rain_mrse.WaitOne();
-                OWO.Send(FeedbackMapWithoutMuscles["Raindrop"], getRandomMuscleRain().WithIntensity(rainRandom.Next(rainDropIntensity)));
+                OWO.Send(FeedbackMap["Raindrop"], getRandomMuscleRain().WithIntensity(rainRandom.Next(rainDropIntensity)));
                 Thread.Sleep(rainRandom.Next(rainDropPause) + 200);
             }
         }
@@ -57,10 +57,8 @@ namespace MyOwoVest
 
         public TactsuitVR()
         {
-            LOG("Initializing suit");
-            OWO.OnConnected.AddListener(InitializeOWO);
-            OWO.AutoConnect();
-            //OWO.Connect("192.168.1.212");
+            RegisterAllTactFiles();
+            InitializeOWO();
             LOG("Starting rain thread.");
             Thread RainThread = new Thread(RainFunc);
             RainThread.Start();
@@ -68,17 +66,67 @@ namespace MyOwoVest
 
         private void InitializeOWO()
         {
-            suitDisabled = false;
-            LOG("OWO suit connected.");
-            RegisterAllTactFiles();
+            LOG("Initializing suit");
+
+            // New auth.
+            var gameAuth = GameAuth.Create(AllBakedSensations()).WithId("70269499");
+
+            OWO.Configure(gameAuth);
+            string myIP = getIpFromFile("OWO_Manual_IP.txt");
+            if (myIP == "") OWO.AutoConnect();
+            else
+            {
+                LOG("Found manual IP address: " + myIP);
+                OWO.Connect(myIP);
+            }
+            Thread.Sleep(5000);
+            if (OWO.ConnectionState == ConnectionState.Connected)
+            {
+                suitDisabled = false;
+                LOG("OWO suit connected.");
+            }
+            if (suitDisabled) LOG("Owo is not enabled?!?!");
         }
+
+        public string getIpFromFile(string filename)
+        {
+            string ip = "";
+            string filePath = Directory.GetCurrentDirectory() + "\\Mods\\" + filename;
+            if (File.Exists(filePath))
+            {
+                string fileBuffer = File.ReadAllText(filePath);
+                IPAddress address;
+                if (IPAddress.TryParse(fileBuffer, out address)) ip = fileBuffer;
+            }
+            return ip;
+        }
+
+        private BakedSensation[] AllBakedSensations()
+        {
+            var result = new List<BakedSensation>();
+
+            foreach (var sensation in FeedbackMap.Values)
+            {
+                if (sensation is BakedSensation baked)
+                {
+                    LOG("Registered baked sensation: " + baked.name);
+                    result.Add(baked);
+                }
+                else
+                {
+                    LOG("Sensation not baked? " + sensation);
+                    continue;
+                }
+            }
+            return result.ToArray();
+        }
+
 
         ~TactsuitVR()
         {
             LOG("Destructor called");
             DisconnectOwo();
         }
-
 
         public void DisconnectOwo()
         {
@@ -108,22 +156,16 @@ namespace MyOwoVest
                 if (filename == "." || filename == "..")
                     continue;
                 string tactFileStr = File.ReadAllText(fullName);
-                string tactFileStrWithoutMuscles = DetachFromMuscles(tactFileStr);
                 try
                 {
-                    ISensation test = Sensation.FromCode(tactFileStr);
-                    ISensation testNoMuscles = Sensation.FromCode(tactFileStrWithoutMuscles);
-                    //bHaptics.RegisterFeedback(prefix, tactFileStr);
-                    LOG("Pattern registered: " + prefix);
+                    Sensation test = Sensation.Parse(tactFileStr);
                     FeedbackMap.Add(prefix, test);
-                    FeedbackMapWithoutMuscles.Add(prefix, testNoMuscles);
                 }
                 catch (Exception e) { LOG(e.ToString()); }
 
             }
 
             systemInitialized = true;
-            PlayBackFeedback("Startup");
         }
 
         public string DetachFromMuscles(string pattern)
@@ -144,14 +186,14 @@ namespace MyOwoVest
         public void StopThreads()
         {
             Rain_mrse.Reset();
-            OWO.StopSensation();
+            OWO.Stop();
         }
 
         public void PlayBackHit(string pattern, float xzAngle, float yShift, float intensity = 1.0f)
         {
             if (FeedbackMap.ContainsKey(pattern))
             {
-                ISensation sensation = FeedbackMapWithoutMuscles[pattern];
+                Sensation sensation = FeedbackMap[pattern];
                 Muscle myMuscle = Muscle.Pectoral_R;
                 int intensityPercentage = (int)(intensity * 100f);
                 // two parameters can be given to the pattern to move it on the vest:

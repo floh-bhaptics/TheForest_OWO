@@ -67,7 +67,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyBhapticsTactsuit.cs" />
     <Compile Include="MyOWOVest.cs" />
     <Compile Include="TheForest_OWO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
