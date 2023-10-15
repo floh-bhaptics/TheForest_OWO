@@ -17,7 +17,7 @@ using MelonLoader;
 [assembly: AssemblyCulture("")]
 
 
-[assembly: MelonInfo(typeof(TheForest_bhaptics.TheForest_bhaptics), "TheForest_bhaptics", "2.0.0", "Florian Fahrenberger")]
+[assembly: MelonInfo(typeof(TheForest_bhaptics.TheForest_bhaptics), "TheForest_bhaptics", "3.0.0", "Florian Fahrenberger")]
 [assembly: MelonGame("SKS", "TheForest")]
 
 // Durch Festlegen von ComVisible auf FALSE werden die Typen in dieser Assembly
