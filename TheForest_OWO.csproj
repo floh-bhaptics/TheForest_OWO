@@ -43,8 +43,9 @@
       <HintPath>D:\Games\Steam\steamapps\common\The Forest\MelonLoader\net35\MelonLoader.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="OWO_Net35.dev">
-      <HintPath>libs\OWO_Net35.dev.dll</HintPath>
+    <Reference Include="OWO_3.5">
+      <HintPath>libs\OWO_3.5.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -73,6 +74,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>XCOPY "$(SolutionDir)OWO" "$(TargetDir)\OWO\" /S /Y</PostBuildEvent>
+    <PostBuildEvent>XCOPY "$(SolutionDir)OWO" "$(TargetDir)\OWO\" /S /Y
+XCOPY "$(SolutionDir)libs\OWO_3.5.dll" "$(TargetDir)\..\UserLibs\" /S /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>
