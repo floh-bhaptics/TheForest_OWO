@@ -69,7 +69,7 @@ namespace MyOwoVest
             LOG("Initializing suit");
 
             // New auth.
-            var gameAuth = GameAuth.Create(AllBakedSensations()).WithId("70269499");
+            var gameAuth = GameAuth.Create(AllBakedSensations()).WithId("45943607");
 
             OWO.Configure(gameAuth);
             string myIP = getIpFromFile("OWO_Manual_IP.txt");
