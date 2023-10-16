@@ -45,7 +45,7 @@
     </Reference>
     <Reference Include="OWO_3.5">
       <HintPath>libs\OWO_3.5.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -73,7 +73,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>XCOPY "$(SolutionDir)OWO" "$(TargetDir)\OWO\" /S /Y
-XCOPY "$(SolutionDir)libs\OWO_3.5.dll" "$(TargetDir)\..\UserLibs\" /S /Y</PostBuildEvent>
+    <PostBuildEvent>XCOPY "$(SolutionDir)OWO" "$(TargetDir)\OWO\" /S /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>
