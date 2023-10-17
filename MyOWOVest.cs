@@ -73,18 +73,23 @@ namespace MyOwoVest
 
             OWO.Configure(gameAuth);
             string myIP = getIpFromFile("OWO_Manual_IP.txt");
+            OWO.OnConnected += suitConnected;
             if (myIP == "") OWO.AutoConnect();
             else
             {
                 LOG("Found manual IP address: " + myIP);
                 OWO.Connect(myIP);
             }
-            Thread.Sleep(5000);
+        }
+
+        private void suitConnected()
+        {
             if (OWO.ConnectionState == ConnectionState.Connected)
             {
                 suitDisabled = false;
                 LOG("OWO suit connected.");
             }
+            else LOG("ConnectionState weird.");
             if (suitDisabled) LOG("Owo is not enabled?!?!");
         }
 
