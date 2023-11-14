@@ -4,7 +4,8 @@ First simple OWO mod for The Forest VR. If you have questions or issues, ping me
 ## Installation
 1. Get the [MelonLoader installer](https://melonwiki.xyz/#/?id=automated-installation) and install MelonLoader on your game executable.
 2. Download the [latest release](https://github.com/floh-bhaptics/TheForest_OWO/releases/latest/) of the mod and unzip the contents into the "Mods" directory in your game folder.
-3. That's it. Start your OWO app in the same network, connect to the OWO skin, and start up the game.
+3. Run the "Unstrip_system_libraries.bat" script in the "Mods" directory, it will unhollow some of the system libraries in the VR version of the game. You might be warned by Windows, then you will have to click "More info" and "Run anyway".
+4. That's it. Start your OWO app in the same network, connect to the OWO skin, and start up the game.
 
 ## Featured effects
 - Hacking with your tool
